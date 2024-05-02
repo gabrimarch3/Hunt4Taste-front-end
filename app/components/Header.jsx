@@ -1,27 +1,60 @@
-"use client";
 import React, { useState, useEffect } from "react";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import HamburgerMenu from "./HamburgerMenu";
-import '../slideshow.css'
+import Cookies from 'js-cookie';
+import '../slideshow.css';
 
 const Header = () => {
-  const images = [
-    "https://www.marchesedelgrillo.com/images/hotel-fabriano-gallery/ristorante/chef-ristorante003.jpeg",
-    "https://www.marchesedelgrillo.com/images/hotel-fabriano-gallery/ristorante/ristorante-fabriano-037.jpg",
-    "https://www.marchesedelgrillo.com/images/hotel-fabriano-gallery/ristorante/chef-ristorante006.jpeg",
-  ];
-
+  const [images, setImages] = useState([]);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [logo, setLogo] = useState('');
 
   useEffect(() => {
-    const intervalId = setInterval(() => {
-      setCurrentImageIndex(
-        (currentImageIndex) => (currentImageIndex + 1) % images.length
-      );
-    }, 5000);
+    const fetchData = async () => {
+      const queryParams = new URLSearchParams(window.location.search);
+      let userId = parseInt(queryParams.get('user_id'), 10);
 
-    return () => clearInterval(intervalId);
+      if (!userId) {
+        userId = parseInt(Cookies.get('user_id'), 10);
+      }
+
+      if (!userId) {
+        console.error('User ID not found in URL or cookies');
+        return;
+      }
+
+      try {
+        const response = await fetch(`https://hunt4taste.it/api/header-images`);
+        const data = await response.json();
+        const userData = data.find(item => item.user_id === userId);
+        if (userData) {
+          setImages([userData.image_one, userData.image_two, userData.image_three]);
+          setLogo(userData.logo); // Set logo URL from the fetched data
+        } else {
+          console.error('No images or logo found for this user');
+        }
+      } catch (error) {
+        console.error('Error fetching images:', error);
+      }
+    };
+
+    fetchData();
   }, []);
+
+  useEffect(() => {
+    if (images.length > 0) {
+      const intervalId = setInterval(() => {
+        setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
+      }, 5000);
+
+      return () => clearInterval(intervalId);
+    }
+  }, [images]); // Depend on images state to ensure the interval starts after images are loaded
+
+  if (images.length === 0) {
+    return <div className="h-[30vh]"></div>; // Placeholder for loading state
+  }
+
   return (
     <div className="relative h-[30vh]">
       <TransitionGroup>
@@ -44,14 +77,10 @@ const Header = () => {
         </CSSTransition>
       </TransitionGroup>
 
-      {/* Contenuto del header (incluso il logo) sopra il background */}
       <div className="absolute inset-0 z-10">
-        <div
-          className="absolute left-1/2 transform -translate-x-1/2"
-          style={{ top: "75%" }}
-        >
+        <div className="absolute left-1/2 transform -translate-x-1/2" style={{ top: "65%" }}>
           <img
-            src="https://login.spottywifi.app/users/7007/images/logo.png?RFO"
+            src={logo} // Using dynamic logo URL
             alt="Logo"
             className="w-[120px] h-[120px] rounded-lg z-10"
           />

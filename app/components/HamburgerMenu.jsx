@@ -24,10 +24,42 @@ import Cookies from 'js-cookie';
 const HamburgerMenu = () => {
   const [open, setOpen] = useState(false);
   const [sections, setSections] = useState([]);
+  const [logo, setLogo] = useState(''); // Stato per il logo
   const [userId, setUserId] = useState(null);
 
  
 
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const queryParams = new URLSearchParams(window.location.search);
+      let userId = parseInt(queryParams.get('user_id'), 10);
+
+      if (!userId) {
+        userId = parseInt(Cookies.get('user_id'), 10);
+      }
+
+      if (!userId) {
+        console.error('User ID not found in URL or cookies');
+        return;
+      }
+
+      try {
+        const response = await fetch(`https://hunt4taste.it/api/header-images`);
+        const data = await response.json();
+        const userData = data.find(item => item.user_id === userId);
+        if (userData) {
+          setLogo(userData.logo); // Set logo URL from the fetched data
+        } else {
+          console.error('No images or logo found for this user');
+        }
+      } catch (error) {
+        console.error('Error fetching images:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   useEffect(() => {
     const fetchSections = async () => {
@@ -80,7 +112,7 @@ const HamburgerMenu = () => {
 >
 <div className="flex items-center justify-between p-4 bg-[#485d8b] text-white" style={{ position: 'relative', height: '64px' }}>
   <div style={{ position: 'absolute', top: '100%', left: '50%', transform: 'translate(-50%, -50%)' }}>
-    <img src='https://login.spottywifi.app/users/7007/images/logo.png?RFO' alt="Hunt for Taste Logo" style={{ maxHeight: '100px', maxWidth: '100px' }} className='rounded-xl' />
+    <img src={logo} alt="Hunt for Taste Logo" style={{ maxHeight: '100px', maxWidth: '100px' }} className='rounded-xl' />
   </div>
   <IconButton onClick={toggleDrawer(false)} className="text-white">
     <IoMdClose size={24} />
