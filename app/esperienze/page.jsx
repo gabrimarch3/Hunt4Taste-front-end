@@ -4,16 +4,25 @@ import NavigationHeader from "../components/NavigationHeader";
 import Footer from "../components/Footer";
 import Link from "next/link";
 import Image from "next/image";
+import Cookies from 'js-cookie'; 
 
 const Esperienze = () => {
   const [experiences, setExperiences] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    const userId = Cookies.get('user_id'); // Retrieve the user_id from cookies
+    if (!userId) {
+      console.error("No user ID found in cookies.");
+      setIsLoading(false);
+      return;
+    }
+
     fetch("https://hunt4taste.it/api/experiences")
       .then((response) => response.json())
       .then((data) => {
-        const filteredExperiences = data.filter(experience => experience.user_id === 7);
+        // Filter the experiences based on the user_id from the cookie
+        const filteredExperiences = data.filter(experience => parseInt(experience.user_id) === parseInt(userId));
         setExperiences(filteredExperiences);
         setIsLoading(false);
       })

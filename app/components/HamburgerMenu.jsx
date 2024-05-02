@@ -18,25 +18,39 @@ import { GiHamburgerMenu } from 'react-icons/gi';
 import { IoMdClose } from 'react-icons/io'; // Icona per chiudere il menu
 import WineBarIcon from '@mui/icons-material/WineBar';
 import { FaFacebookF, FaInstagram, FaTwitter, FaYoutube, FaShoppingBag } from 'react-icons/fa';
+import Cookies from 'js-cookie';
 
 
 const HamburgerMenu = () => {
   const [open, setOpen] = useState(false);
   const [sections, setSections] = useState([]);
+  const [userId, setUserId] = useState(null);
+
+ 
+
 
   useEffect(() => {
     const fetchSections = async () => {
+
+    setUserId(Cookies.get('user_id'));
       try {
+        // Fetch all sections from the API
         const response = await axios.get('https://hunt4taste.it/api/sections');
-        const filteredSections = response.data.filter(section => section.user_id === 7);
+
+        // Get the user_id from the URL query parameters
+        const queryParams = new URLSearchParams(window.location.search);
+        const userId = parseInt(queryParams.get('user_id'));
+
+        // Filter the sections based on the user_id extracted from the URL
+        const filteredSections = response.data.filter(section => section.user_id === userId);
         setSections(filteredSections);
       } catch (error) {
         console.error('Error fetching sections:', error);
       }
     };
-  
+
     fetchSections();
-  }, []);
+  }, []); // Dependency array remains empty as the URL and user ID should not change during the lifecycle of this component
   
   const toggleDrawer = (open) => (event) => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -45,8 +59,9 @@ const HamburgerMenu = () => {
     setOpen(open);
   };
 
+
   const menuItems = [
-    { text: 'Home', href: '/', icon: <HomeIcon /> },
+    { text: 'Home', href: `/?user_id=${userId}`, icon: <HomeIcon /> },
     { text: 'Esperienze', href: '/esperienze', icon: <ExperienceIcon /> },
     { text: 'Shop', href: '/shop', icon: <FaShoppingBag /> },
   ];

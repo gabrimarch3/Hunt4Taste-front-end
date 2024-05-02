@@ -17,6 +17,7 @@ import {
   styled,
 } from "@mui/material";
 import ProductModal from '../components/ProductModal';
+import Cookies from 'js-cookie';
 import axios from 'axios'; // Importa axios per effettuare le chiamate API
 
 const Shop = () => {
@@ -37,41 +38,45 @@ const Shop = () => {
   const { addToCart, cartItems } = useCart();
   
   useEffect(() => {
+    const userId = Cookies.get('user_id'); // Retrieve the user_id from cookies
+
     const fetchCategories = async () => {
       try {
         const response = await axios.get("https://hunt4taste.it/api/categories");
-        const filteredCategories = response.data.filter(category => category.user_id === 7);
+        const filteredCategories = response.data.filter(category => category.user_id === parseInt(userId));
         setCategories(filteredCategories);
       } catch (error) {
         console.error("Error fetching categories:", error);
       }
     };
-  
+
     const fetchSubcategories = async () => {
       try {
         const response = await axios.get("https://hunt4taste.it/api/subcategories");
-        const filteredSubcategories = response.data.filter(subcategory => subcategory.user_id === 7);
+        const filteredSubcategories = response.data.filter(subcategory => subcategory.user_id === parseInt(userId));
         setSubcategories(filteredSubcategories);
       } catch (error) {
         console.error("Error fetching subcategories:", error);
       }
     };
-  
+
     const fetchProducts = async () => {
       setIsLoading(true);
       try {
         const response = await axios.get("https://hunt4taste.it/api/products");
-        const filteredProducts = response.data.filter(product => product.user_id === 7);
+        const filteredProducts = response.data.filter(product => product.user_id === parseInt(userId));
         setProducts(filteredProducts);
       } catch (error) {
         setError(error.message);
       }
       setIsLoading(false);
     };
-  
-    fetchCategories();
-    fetchSubcategories();
-    fetchProducts();
+
+    if (userId) { // Only fetch if userId is available
+      fetchCategories();
+      fetchSubcategories();
+      fetchProducts();
+    }
   }, []);
   
   useEffect(() => {

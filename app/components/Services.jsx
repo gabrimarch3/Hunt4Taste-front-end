@@ -13,6 +13,8 @@ import { Grid, Card, CardMedia, CardContent, Typography } from "@mui/material";
 import { FaWineBottle } from "react-icons/fa";
 import Skeleton from "react-loading-skeleton";
 import Link from "next/link";
+import Cookies from 'js-cookie';
+
 
 export default function ServicesSection(props) {
   const [services, setServices] = useState([]);
@@ -23,16 +25,26 @@ export default function ServicesSection(props) {
   const [emblaRef, emblaApi] = useEmblaCarousel(options);
 
   useEffect(() => {
+    // Get the user_id from cookies
+    const userId = parseInt(Cookies.get('user_id'));
+  
+    if (!userId) {
+      console.error('User ID not found in cookies');
+      return;
+    }
+  
+    // Fetch all services from the API
     fetch("https://hunt4taste.it/api/services")
-      .then((response) => response.json())
-      .then((data) => {
-          const filteredServices = data.filter(service => service.user_id === 7);
-          setServices(filteredServices);
-          console.log(filteredServices);
+      .then(response => response.json())
+      .then(data => {
+        // Filter the services based on the user_id stored in cookies
+        const filteredServices = data.filter(service => service.user_id === userId);
+        setServices(filteredServices);
+        console.log(filteredServices);
       })
-      .catch((error) => console.error("Error fetching data: ", error));
-  }, []);
-
+      .catch(error => console.error("Error fetching data: ", error));
+  }, []);  // The dependency array remains empty because the user ID in cookies is expected not to change frequently
+  
 
   const styles = {
     card: {

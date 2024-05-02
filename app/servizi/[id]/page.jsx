@@ -6,6 +6,7 @@ import Footer from "../../components/Footer";
 import SwiperCards from "../../components/SwiperCards";
 import ServicesSection from '../../components/Services';
 import { FaTag , FaEuroSign } from "react-icons/fa";
+import Cookies from 'js-cookie';
 import Image from 'next/image';
 
 const ServiceDetailPage = () => {
@@ -15,11 +16,19 @@ const ServiceDetailPage = () => {
     const [isLoading, setIsLoading] = useState(true);
   
     useEffect(() => {
+      const userId = Cookies.get('user_id'); // Retrieve the user_id from cookies
+      if (!userId) {
+        console.error("No user ID found in cookies.");
+        setIsLoading(false);
+        return;
+      }
+  
       if (serviceId) {
         fetch(`https://hunt4taste.it/api/services/${serviceId}`)
           .then(response => response.json())
           .then(data => {
-            if (data.user_id === 7) {
+            // Check if the returned service's user_id matches the user_id from cookies
+            if (parseInt(data.user_id) === parseInt(userId)) {
               setService(data);
             } else {
               setService(null);

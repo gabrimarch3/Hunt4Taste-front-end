@@ -16,6 +16,7 @@ import AppsOutlinedIcon from "@mui/icons-material/AppsOutlined";
 import CloseIcon from "@mui/icons-material/Close";
 import IconButton from "@mui/material/IconButton";
 import {FaShoppingBag} from 'react-icons/fa';
+import Cookies from 'js-cookie';
 
 const Footer = () => {
   const router = useRouter();
@@ -23,6 +24,8 @@ const Footer = () => {
   const [isIOS, setIsIOS] = useState(false);
   const [isPWAInstalled, setIsPWAInstalled] = useState(false);
   const [showiOSInstructions, setShowiOSInstructions] = useState(false);
+  const [userId, setUserId] = useState(null);
+
 
   useEffect(() => {
     // Controlla se l'app è in modalità standalone (cioè se è stata installata)
@@ -31,6 +34,8 @@ const Footer = () => {
       window.navigator.standalone ||
       document.referrer.includes("android-app://");
     setIsPWAInstalled(isStandalone);
+
+    setUserId(Cookies.get('user_id'));
 
     // Controllo per dispositivi iOS
     setIsIOS(/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream);
@@ -100,7 +105,7 @@ const Footer = () => {
         showLabels
         className="mt-20 flex justify-between sticky bottom-0"
       >
-        <Link href="/">
+        <Link href={`/?user_id=${userId}`}>
           <Fab
             size="secondary"
             aria-label="home"

@@ -7,6 +7,7 @@ import { BiHotel } from "react-icons/bi";
 import Skeleton from "@mui/material/Skeleton";
 import Link from "next/link";
 import Image from "next/image";
+import Cookies from 'js-cookie';
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
@@ -27,16 +28,25 @@ export default function SwiperCards({ isLoading }) {
 
   useEffect(() => {
     if (!isLoading) {
+      // Get the user_id from the cookies
+      const userId = parseInt(Cookies.get('user_id'));
+  
+      if (!userId) {
+        console.error('User ID not found in cookies');
+        return;
+      }
+  
+      // Fetch all cards from the API
       fetch("https://hunt4taste.it/api/cards")
         .then((response) => response.json())
         .then((data) => {
-            const filteredCards = data.filter(card => card.user_id === 7);
-            setCards(filteredCards);
+          // Filter the cards based on the user_id stored in cookies
+          const filteredCards = data.filter(card => card.user_id === userId);
+          setCards(filteredCards);
         })
         .catch((error) => console.error("Errore nella chiamata API:", error));
     }
-}, [isLoading]);
-
+  }, [isLoading]); // The dependency on isLoading triggers this effect only when isLoading changes
 
   return (
     <Swiper
