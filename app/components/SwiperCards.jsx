@@ -28,16 +28,16 @@ export default function SwiperCards({ isLoading }) {
 
   useEffect(() => {
     if (!isLoading) {
-      let userId = parseInt(Cookies.get('user_id'));
+      const queryParams = new URLSearchParams(window.location.search);
+      let userId = parseInt(queryParams.get('user_id'));
   
-      // If not found in cookies, try to get it from the URL
+      // If not found in the URL, try to get it from cookies
       if (!userId) {
-        const queryParams = new URLSearchParams(window.location.search);
-        userId = parseInt(queryParams.get('user_id'));
+        userId = parseInt(Cookies.get('user_id'));
       }
-
+  
       if (!userId) {
-        console.error('User ID not found in cookies or URL');
+        console.error('User ID not found in URL or cookies');
         return;
       }
   
