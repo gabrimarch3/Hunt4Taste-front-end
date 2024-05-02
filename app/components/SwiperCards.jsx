@@ -28,23 +28,28 @@ export default function SwiperCards({ isLoading }) {
 
   useEffect(() => {
     if (!isLoading) {
-      // Get the user_id from the cookies
-      const userId = parseInt(Cookies.get('user_id'));
+      let userId = parseInt(Cookies.get('user_id'));
   
+      // If not found in cookies, try to get it from the URL
       if (!userId) {
-        console.error('User ID not found in cookies');
+        const queryParams = new URLSearchParams(window.location.search);
+        userId = parseInt(queryParams.get('user_id'));
+      }
+
+      if (!userId) {
+        console.error('User ID not found in cookies or URL');
         return;
       }
   
       // Fetch all cards from the API
-      fetch("https://hunt4taste.it/api/cards")
-        .then((response) => response.json())
-        .then((data) => {
-          // Filter the cards based on the user_id stored in cookies
+      fetch(`https://hunt4taste.it/api/cards`)
+        .then(response => response.json())
+        .then(data => {
+          // Filter the cards based on the user_id
           const filteredCards = data.filter(card => card.user_id === userId);
           setCards(filteredCards);
         })
-        .catch((error) => console.error("Errore nella chiamata API:", error));
+        .catch(error => console.error("Error fetching cards from API:", error));
     }
   }, [isLoading]); // The dependency on isLoading triggers this effect only when isLoading changes
 

@@ -25,19 +25,24 @@ export default function ServicesSection(props) {
   const [emblaRef, emblaApi] = useEmblaCarousel(options);
 
   useEffect(() => {
-    // Get the user_id from cookies
-    const userId = parseInt(Cookies.get('user_id'));
-  
+    let userId = parseInt(Cookies.get('user_id'));
+
+    // If not found in cookies, try to get it from the URL
     if (!userId) {
-      console.error('User ID not found in cookies');
+      const queryParams = new URLSearchParams(window.location.search);
+      userId = parseInt(queryParams.get('user_id'));
+    }
+
+    if (!userId) {
+      console.error('User ID not found in cookies or URL');
       return;
     }
-  
+
     // Fetch all services from the API
     fetch("https://hunt4taste.it/api/services")
       .then(response => response.json())
       .then(data => {
-        // Filter the services based on the user_id stored in cookies
+        // Filter the services based on the user_id
         const filteredServices = data.filter(service => service.user_id === userId);
         setServices(filteredServices);
         console.log(filteredServices);
