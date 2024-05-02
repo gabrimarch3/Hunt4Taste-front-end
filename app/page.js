@@ -11,14 +11,15 @@ export default function Home() {
   useEffect(() => {
     const queryParams = new URLSearchParams(window.location.search);
     const userIdFromUrl = queryParams.get('user_id');
-    
-    // Check if user_id is available and update cookie
+
     if (userIdFromUrl) {
-      Cookies.set('user_id', userIdFromUrl, { expires: 1 }); // Expires in 1 day
+      Cookies.set('user_id', userIdFromUrl, { expires: 10 });
     }
+    
+    // Replace current URL with new one
+    window.history.replaceState({}, "", "https://hunt4taste.it/dashboard/");
   }, []);
 
-  // Retrieve user_id from cookie
   const userId = Cookies.get('user_id');
 
   return (
