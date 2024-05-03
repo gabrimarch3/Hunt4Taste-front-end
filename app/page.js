@@ -10,15 +10,25 @@ import Footer from "./components/Footer";
 export default function Home() {
   useEffect(() => {
     const queryParams = new URLSearchParams(window.location.search);
-    const userIdFromUrl = queryParams.get('user_id');
-    
-    // Check if user_id is available and update cookie
-    if (userIdFromUrl) {
-      Cookies.set('user_id', userIdFromUrl, { expires: 10 }); // Expires in 1 day
+    const encodedUserId = queryParams.get('user_id');
+  
+    if (encodedUserId) {
+      try {
+        // Decodifica da base64 e converte i caratteri URL-encodati in normali caratteri
+        const decodedUserId = decodeURIComponent(window.atob(encodedUserId).split('').map((c) => {
+          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+  
+        // Salva il userId decodificato nei cookie con una scadenza di 10 giorni
+        Cookies.set('user_id', decodedUserId, { expires: 10 });
+  
+      } catch (error) {
+        console.error('Error decoding user ID:', error);
+      }
     }
   }, []);
 
-  // Retrieve user_id from cookie
+  
   const userId = Cookies.get('user_id');
 
   return (
