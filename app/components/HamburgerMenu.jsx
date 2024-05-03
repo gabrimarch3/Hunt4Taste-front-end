@@ -118,7 +118,7 @@ const HamburgerMenu = () => {
     <IoMdClose size={24} />
   </IconButton>
 </div>
-  <List className='mt-[50px] text-bold'>
+  <List className='mt-[70px] text-bold'>
   {menuItems.map((item, index) => (
     <ListItem key={index} disablePadding className='w-full'>
       <Link href={item.href} passHref className='w-full'>
