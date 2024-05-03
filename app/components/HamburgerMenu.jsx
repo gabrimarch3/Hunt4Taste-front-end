@@ -93,7 +93,7 @@ const HamburgerMenu = () => {
 
 
   const menuItems = [
-    { text: 'Home', href: `/?user_id=${userId}`, icon: <HomeIcon /> },
+    { text: 'Home', href: `/`, icon: <HomeIcon /> },
     { text: 'Esperienze', href: '/esperienze', icon: <ExperienceIcon /> },
     { text: 'Shop', href: '/shop', icon: <FaShoppingBag /> },
   ];

@@ -105,7 +105,7 @@ const Footer = () => {
         showLabels
         className="mt-20 flex justify-between sticky bottom-0"
       >
-        <Link href={`/?user_id=${userId}`}>
+        <Link href={`/`}>
           <Fab
             size="secondary"
             aria-label="home"
