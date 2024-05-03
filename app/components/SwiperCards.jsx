@@ -127,7 +127,7 @@ export default function SwiperCards({ isLoading }) {
       <div className="px-5 py-3 flex-1 flex flex-col justify-between">
         <div className="flex items-center justify-start space-x-2">
           <BiHotel className="text-[#485d8b]" size={24} />
-          <h3 className="text-xl font-semibold text-[#485d8b]">{truncateText(card.title, 40)}</h3>
+          <h3 className="text-xl font-semibold text-[#485d8b]">{truncateText(card.title, 20)}</h3>
         </div>
         <p className="text-[#5D5D5D] text-sm text-left mt-2 overflow-hidden">{truncateText(card.description, 80)}</p>
       </div>

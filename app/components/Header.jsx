@@ -78,7 +78,7 @@ const Header = () => {
       </TransitionGroup>
 
       <div className="absolute inset-0 z-10">
-        <div className="absolute left-1/2 transform -translate-x-1/2" style={{ top: "65%" }}>
+        <div className="absolute left-1/2 transform -translate-x-1/2 bg-white" style={{ top: "65%" }}>
           <img
             src={logo} // Using dynamic logo URL
             alt="Logo"

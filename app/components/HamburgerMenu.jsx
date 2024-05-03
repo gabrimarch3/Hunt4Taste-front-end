@@ -156,22 +156,8 @@ const HamburgerMenu = () => {
           ))}
         </List>
   {/* Footer Section */}
-  <div className="mt-auto w-full self-end bg-[#485d8b] text-white p-4">
-    <p className="text-lg font-bold text-center mb-4">Seguici sui social!</p>
-    <div className="flex justify-center space-x-4">
-      <a href="https://facebook.com" target="_blank" rel="noreferrer" aria-label="Facebook">
-        <FaFacebookF className="text-white text-2xl hover:text-gray-300" />
-      </a>
-      <a href="https://instagram.com" target="_blank" rel="noreferrer" aria-label="Instagram">
-        <FaInstagram className="text-white text-2xl hover:text-gray-300" />
-      </a>
-      <a href="https://twitter.com" target="_blank" rel="noreferrer" aria-label="Twitter">
-        <FaTwitter className="text-white text-2xl hover:text-gray-300" />
-      </a>
-      <a href="https://youtube.com" target="_blank" rel="noreferrer" aria-label="YouTube">
-        <FaYoutube className="text-white text-2xl hover:text-gray-300" />
-      </a>
-    </div>
+  <div className="mt-auto w-full h-10 self-end bg-[#485d8b] text-white p-4">
+   
   </div>
 </Box>
       </Drawer>
