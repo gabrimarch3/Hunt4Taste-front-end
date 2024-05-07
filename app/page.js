@@ -5,6 +5,7 @@ import Header from "./components/Header";
 import Services from "./components/Services";
 import SwiperCards from "./components/SwiperCards";
 import SubscriptionForm from "./components/SubscriptionForm";
+import QRCodeComponent from './components/QRCodeComponent';
 import Footer from "./components/Footer";
 
 export default function Home() {
@@ -47,6 +48,7 @@ export default function Home() {
         </div>
       </div>
       <SubscriptionForm userId={userId} />
+      <QRCodeComponent userId={userId} />
       <Footer />
     </>
   );

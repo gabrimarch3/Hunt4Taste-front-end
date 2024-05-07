@@ -4,6 +4,8 @@ import { CartProvider } from "./context/CartContex";
 import { SpeedInsights } from "@vercel/speed-insights/next"
 
 
+
+
 const roboto = Roboto({
   subsets: ["latin"],
   weight: ["100", "300", "400", "500", "700", "900"],
