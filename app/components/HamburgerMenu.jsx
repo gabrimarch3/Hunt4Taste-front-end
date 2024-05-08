@@ -100,69 +100,63 @@ const HamburgerMenu = () => {
 
   return (
     <>
-      <IconButton onClick={toggleDrawer(true)}>
-        <GiHamburgerMenu size={24} fill='white'/>
+      <IconButton onClick={toggleDrawer(true)} className="text-white">
+        <GiHamburgerMenu size={24} />
       </IconButton>
-      <Drawer anchor="left" open={open} onClose={toggleDrawer(false)} className='h-full'>
-      <Box
-  role="presentation"
-  onClick={toggleDrawer(false)}
-  onKeyDown={toggleDrawer(false)}
-  className="w-80 flex flex-col h-full" 
->
-<div className="flex items-center justify-between p-4 bg-[#485d8b] text-white" style={{ position: 'relative', height: '64px' }}>
-  <div style={{ position: 'absolute', top: '100%', left: '50%', transform: 'translate(-50%, -50%)' }}>
-    <img src={logo} alt="Hunt for Taste Logo" style={{ maxHeight: '100px', maxWidth: '100px' }} className='rounded-xl' />
-  </div>
-  <IconButton onClick={toggleDrawer(false)} className="text-white">
-    <IoMdClose size={24} />
-  </IconButton>
-</div>
-  <List className='mt-[70px] text-bold'>
-  {menuItems.map((item, index) => (
-    <ListItem key={index} disablePadding className='w-full'>
-      <Link href={item.href} passHref className='w-full'>
-        <ListItemButton
-          style={{
-            borderRadius: '8px',
-            padding: '10px',
-            transition: 'background-color 0.3s',
-          }}
-          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f0f0f0'}
-          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'white'}
-          className='w-full'
+      <Drawer
+        anchor="left"
+        open={open}
+        onClose={toggleDrawer(false)}
+        className="fixed top-0 left-0 z-40 w-64 h-screen transition-transform transform"
+        aria-label="Sidebar"
+        BackdropProps={{ invisible: true }}  // This makes the backdrop invisible
+      >
+        <Box
+          role="presentation"
+          onClick={toggleDrawer(false)}
+          onKeyDown={toggleDrawer(false)}
+          className="px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800 h-full relative"
         >
-          <ListItemIcon style={{ color: '#485d8b', minWidth: '35px' }}>
-            {item.icon}
-          </ListItemIcon>
-          <ListItemText primary={item.text} style={{ fontWeight: 'bold' }} />
-        </ListItemButton>
-      </Link>
-    </ListItem>
-  ))}
-  </List>
-  <hr />
-  <List>
-          {sections.map((section, index) => (
-            <ListItem key={section.id} disablePadding>
-              <Link href={`/sections/${section.slug}`} passHref>
-                <ListItemButton>
-                  {/* Use `dangerouslySetInnerHTML` to render the icon */}
-                  <i className={section.icon} dangerouslySetInnerHTML={{ __html: '' }} />
-                  <ListItemText primary={section.title} />
-                </ListItemButton>
-              </Link>
-            </ListItem>
-          ))}
-        </List>
-  {/* Footer Section */}
-  <div className="mt-auto w-full h-10 self-end bg-[#485d8b] text-white p-4">
-   
-  </div>
-</Box>
+          <ul className="space-y-2 mt-10">
+            {menuItems.map((item, index) => (
+              <li key={index}>
+                <Link href={item.href} passHref>
+                  <ListItemButton
+                    className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 w-full"
+                  >
+                    <ListItemIcon className="text-gray-900 dark:text-white">
+                      {item.icon}
+                    </ListItemIcon>
+                    <ListItemText primary={item.text} className="ml-3" />
+                  </ListItemButton>
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <ul className="space-y-2 mt-2">
+            {sections.map((section, index) => (
+              <li key={section.id}>
+                <Link href={`/sections/${section.slug}`} passHref>
+                  <ListItemButton
+                    className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 w-full"
+                  >
+                    <i className={section.icon + " fas fa-fw"} dangerouslySetInnerHTML={{ __html: '' }} />
+                    <ListItemText primary={section.title} className="ml-3" />
+                  </ListItemButton>
+                </Link>
+              </li>
+            ))}
+          </ul>
+          {/* Footer Section */}
+          <div className="absolute bottom-0 right-0 pb-3 pr-3 mb-10">
+            <p className="text-gray-400 dark:text-gray-400">v. 1.0.0</p>
+          </div>
+        </Box>
       </Drawer>
     </>
   );
+  
+  
 };
 
 export default HamburgerMenu;
