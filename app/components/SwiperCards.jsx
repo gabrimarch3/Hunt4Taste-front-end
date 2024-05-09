@@ -5,6 +5,7 @@ import SwiperCore, { Pagination, Scrollbar } from 'swiper';
 import { FaWineBottle } from "react-icons/fa";
 import { BiHotel } from "react-icons/bi";
 import Skeleton from "@mui/material/Skeleton";
+import he from 'he';
 import Link from "next/link";
 import Image from "next/image";
 import Cookies from 'js-cookie';
@@ -18,13 +19,21 @@ SwiperCore.use([Pagination, Scrollbar]);
 export default function SwiperCards({ isLoading }) {
   const [cards, setCards] = useState([]);
 
-  function truncateText(text, maxLength) {
-    if (text.length > maxLength) {
-      return text.substring(0, maxLength) + "...";
-    }
-    return text;
+
+  
+  function removeHtmlTags(text) {
+    // Decodifica gli entities prima di rimuovere i tag HTML
+    const decodedText = he.decode(text);
+    return decodedText.replace(/<\/?[^>]+(>|$)/g, "");
   }
   
+  function truncateText(text, maxLength) {
+    const cleanText = removeHtmlTags(text);
+    if (cleanText.length > maxLength) {
+      return cleanText.substring(0, maxLength) + "...";
+    }
+    return cleanText;
+  }
 
   useEffect(() => {
     if (!isLoading) {

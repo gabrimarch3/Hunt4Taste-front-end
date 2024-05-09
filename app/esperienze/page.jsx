@@ -4,6 +4,9 @@ import NavigationHeader from "../components/NavigationHeader";
 import Footer from "../components/Footer";
 import Link from "next/link";
 import Image from "next/image";
+import DOMPurify from 'dompurify';
+import he from 'he';
+
 import Cookies from 'js-cookie'; 
 
 const Esperienze = () => {
@@ -32,9 +35,16 @@ const Esperienze = () => {
       });
   }, []);
 
-  const truncateDescription = (desc) => {
-    return desc.length > 100 ? desc.substring(0, 100) + "..." : desc;
+  const truncateDescription = (desc, maxLength = 100) => {
+    // Decodifica gli HTML entities
+    const decodedText = he.decode(desc);
+    // Sanitizza il testo rimuovendo i tag HTML
+    const cleanText = DOMPurify.sanitize(decodedText, {ALLOWED_TAGS: []});
+    // Tronca il testo se supera la lunghezza massima
+    return cleanText.length > maxLength ? cleanText.substring(0, maxLength) + "..." : cleanText;
   };
+  
+  
 
   if (isLoading) {
     return (

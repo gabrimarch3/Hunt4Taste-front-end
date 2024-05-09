@@ -8,6 +8,8 @@ import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
 import { IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import DOMPurify from 'dompurify';
+
 
 const StyledDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiPaper-root": {
@@ -78,6 +80,8 @@ const CloseButton = styled(IconButton)(({ theme }) => ({
 const ProductModal = ({ isOpen, onClose, product, addToCart }) => {
   if (!product) return null;
 
+  const cleanDescription = DOMPurify.sanitize(product.description);
+
   return (
     <StyledDialog
       open={isOpen}
@@ -102,7 +106,7 @@ const ProductModal = ({ isOpen, onClose, product, addToCart }) => {
           alt={product.name}
           style={{ maxWidth: "80%", height: "auto", borderRadius: "10px", marginBottom: "20px" }}
         />
-        <p>{product.description}</p>
+        <p dangerouslySetInnerHTML={{ __html: cleanDescription }}></p>
       </StyledDialogContent>
       <StyledDialogActions>
       <StyledButton onClick={() => {addToCart(product); onClose();}} style={{backgroundColor: "#c5b473", color: "white"}}>

@@ -6,6 +6,8 @@ import { usePathname } from 'next/navigation';
 import axios from "axios";
 import { FaMapLocationDot, FaRegClock, FaEuroSign } from "react-icons/fa6";
 import Image from "next/image";
+import DOMPurify from 'dompurify';
+
 
 const PrenotaEsperienza = () => {
   const pathname = usePathname();
@@ -22,11 +24,14 @@ const PrenotaEsperienza = () => {
   const fetchEsperienzaDetails = async (id) => {
     try {
       const response = await axios.get(`https://hunt4taste.it/api/experiences/${id}`);
+      const cleanDescription = DOMPurify.sanitize(response.data.description); // Pulisci la descrizione
+      response.data.description = cleanDescription; // Aggiorna la descrizione con quella pulita
       setEsperienza(response.data);
     } catch (error) {
       console.error('Errore nel recupero dei dettagli dell\'esperienza:', error);
     }
   };
+  
 
   const handleBook = () => {
     if (!esperienza.is_paid) {
@@ -87,7 +92,7 @@ const PrenotaEsperienza = () => {
             </div>
           </div>
           <h1 className="text-lg text-blue-800 font-bold my-4">{esperienza.title}</h1>
-          <p className="text-gray-700 mb-4">{esperienza.description}</p>
+          <p className="text-gray-700 mb-4" dangerouslySetInnerHTML={{ __html: esperienza.description }}></p>
           <button onClick={handleBook} className="bg-blue-800 w-52 text-white py-2 px-4 rounded-full hover:bg-blue-700 transition duration-300">
             {esperienza.is_paid ? 'Prenota' : 'Richiedi Informazioni'}
           </button>
