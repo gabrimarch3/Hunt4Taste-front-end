@@ -21,7 +21,7 @@ export default function Home() {
         }).join(''));
   
         // Salva il userId decodificato nei cookie con una scadenza di 10 giorni
-        Cookies.set('user_id', decodedUserId, { expires: 10 });
+        Cookies.set('user_id', decodedUserId, { expires: 1/48 });
   
       } catch (error) {
         console.error('Error decoding user ID:', error);
