@@ -1,7 +1,9 @@
 import { Roboto } from "next/font/google";
 import "./globals.css";
 import { CartProvider } from "./context/CartContex";
-import { SpeedInsights } from "@vercel/speed-insights/next"
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Analytics } from "@vercel/analytics/react"
+
 
 
 
@@ -24,6 +26,7 @@ export default function RootLayout({ children }) {
         <body className={roboto.className}>
           {children}
           <SpeedInsights />
+          <Analytics />
         </body>
       </html>
     </CartProvider>
