@@ -49,10 +49,10 @@ const Header = () => {
 
       return () => clearInterval(intervalId);
     }
-  }, [images]); // Depend on images state to ensure the interval starts after images are loaded
+  }, [images]); 
 
   if (images.length === 0) {
-    return <div className="h-[30vh]"></div>; // Placeholder for loading state
+    return <div className="h-[30vh]"></div>; 
   }
 
   return (

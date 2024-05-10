@@ -6,10 +6,10 @@
   "start_url": "/",
   "name": "Hunt4Taste",
   "short_name": "Hunt4Taste",
-  "description": "Hunt4Taste è la tua cantina a portata di TAP!",
+  "description": "La tua cantina a portata di TAP!",
   "icons": [
     {
-      "src": "/icon-192x192.png",
+      "src": "/logo1.png",
       "sizes": "192x192",
       "type": "image/png"
     },
@@ -19,12 +19,12 @@
       "type": "image/png"
     },
     {
-      "src": "/icon-384x384.png",
+      "src": "/logo2.png",
       "sizes": "384x384",
       "type": "image/png"
     },
     {
-      "src": "/icon-512x512.png",
+      "src": "/logo3.png",
       "sizes": "512x512",
       "type": "image/png"
     }
