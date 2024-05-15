@@ -39,12 +39,12 @@ const Esperienze = () => {
     // Decodifica gli HTML entities
     const decodedText = he.decode(desc);
     // Sanitizza il testo rimuovendo i tag HTML
-    const cleanText = DOMPurify.sanitize(decodedText, {ALLOWED_TAGS: []});
+    const cleanText = DOMPurify.sanitize(decodedText, { ALLOWED_TAGS: [] });
+    // Rimuove eventuali HTML entities residue
+    const cleanTextWithoutEntities = cleanText.replace(/&[^\s;]+;/g, '');
     // Tronca il testo se supera la lunghezza massima
-    return cleanText.length > maxLength ? cleanText.substring(0, maxLength) + "..." : cleanText;
+    return cleanTextWithoutEntities.length > maxLength ? cleanTextWithoutEntities.substring(0, maxLength) + "..." : cleanTextWithoutEntities;
   };
-  
-  
 
   if (isLoading) {
     return (
