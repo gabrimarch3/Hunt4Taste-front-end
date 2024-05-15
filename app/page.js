@@ -19,17 +19,24 @@ export default function Home() {
         const decodedUserId = decodeURIComponent(window.atob(encodedUserId).split('').map((c) => {
           return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
         }).join(''));
-  
+        
+        const savedUserId = Cookies.get('user_id');
+
         // Salva il userId decodificato nei cookie con una scadenza di 10 giorni
-        Cookies.set('user_id', decodedUserId, { expires: 1/48 });
-  
+        Cookies.set('user_id', decodedUserId, { expires: 7 });
+
+        // Confronta il userId salvato con quello decodificato
+        if (savedUserId !== decodedUserId) {
+          // Ricarica la pagina se c'è una differenza
+          window.location.reload();
+        }
+        
       } catch (error) {
         console.error('Error decoding user ID:', error);
       }
     }
   }, []);
 
-  
   const userId = Cookies.get('user_id');
 
   return (
