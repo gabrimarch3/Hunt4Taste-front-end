@@ -26,7 +26,7 @@ export default function RootLayout({ children }) {
         <body className={roboto.className}>
           {children}
           <SpeedInsights />
-          <Analytics />
+          <Analytics debug={false}/>
         </body>
       </html>
     </CartProvider>
