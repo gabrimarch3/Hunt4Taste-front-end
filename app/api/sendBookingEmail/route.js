@@ -3,7 +3,8 @@ import sgMail from '@sendgrid/mail';
 import axios from 'axios';
 import cookie from 'cookie';
 
-// Assicurati di caricare la chiave API dalle variabili d'ambiente
+console.log('SENDGRID_API_KEY:', process.env.SENDGRID_API_KEY); // Aggiungi questo log
+
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 export async function POST(req) {
