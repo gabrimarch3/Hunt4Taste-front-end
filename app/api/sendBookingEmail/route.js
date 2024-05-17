@@ -32,7 +32,7 @@ export async function POST(req) {
       html: `
         <div style="font-family: Arial, sans-serif; color: #333; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #eaeaea; border-radius: 10px; background-color: #f9f9f9;">
           <header style="text-align: center; padding-bottom: 20px; border-bottom: 1px solid #eaeaea;">
-            <img src="https://via.placeholder.com/600x200" alt="Logo" style="width: 100%; height: auto; border-radius: 10px 10px 0 0;" />
+            <img src="https://firebasestorage.googleapis.com/v0/b/hunt4taste.appspot.com/o/icon-512x512.png?alt=media&token=0ae695a0-debd-44e7-89df-73ccd7a865f1" alt="Logo" style="width: 100%; height: auto; border-radius: 10px 10px 0 0;" />
             <h1 style="color: #485d8b;">Nuova Prenotazione per ${experienceTitle}</h1>
           </header>
           <main style="padding: 20px;">
