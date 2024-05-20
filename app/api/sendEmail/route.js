@@ -1,14 +1,26 @@
-// app/api/sendEmail/route.js
-import sgMail from '@sendgrid/mail';
+import nodemailer from 'nodemailer';
 
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+const smtpOptions = {
+  host: 'smtp200.ext.armada.it',
+  port: 587,
+  secure: false,
+  auth: {
+    user: 'SMTP-SUPER-12701-3',
+    pass: 'htg6tmHecl94'
+  },
+  tls: {
+    ciphers: 'SSLv3'
+  }
+};
 
 export async function POST(req) {
   const { companyEmail, formData } = await req.json();
 
-  const msg = {
-    to: companyEmail,
+  const transporter = nodemailer.createTransport(smtpOptions);
+
+  const mailOptions = {
     from: 'info@luxorweb.it',
+    to: companyEmail,
     subject: 'Nuova Iscrizione alla Newsletter',
     html: `
       <div style="font-family: Arial, sans-serif; color: #333; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #eaeaea; border-radius: 10px; background-color: #f9f9f9;">
@@ -32,7 +44,7 @@ export async function POST(req) {
   };
 
   try {
-    await sgMail.send(msg);
+    await transporter.sendMail(mailOptions);
     return new Response(JSON.stringify({ message: 'Email inviata con successo' }), { status: 200 });
   } catch (error) {
     console.error('Errore durante l\'invio dell\'email:', error);

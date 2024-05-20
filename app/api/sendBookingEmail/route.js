@@ -1,11 +1,19 @@
-// app/api/sendBookingEmail/route.js
-import sgMail from '@sendgrid/mail';
+import nodemailer from 'nodemailer';
 import axios from 'axios';
 import cookie from 'cookie';
 
-console.log('SENDGRID_API_KEY:', process.env.SENDGRID_API_KEY); // Aggiungi questo log
-
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+const smtpOptions = {
+  host: 'smtp200.ext.armada.it',
+  port: 587,
+  secure: false, // true for 465, false for other ports
+  auth: {
+    user: 'SMTP-SUPER-12701-3',
+    pass: 'htg6tmHecl94'
+  },
+  tls: {
+    ciphers: 'SSLv3'
+  }
+};
 
 export async function POST(req) {
   try {
@@ -25,14 +33,16 @@ export async function POST(req) {
       return new Response(JSON.stringify({ message: 'Company email non trovata' }), { status: 404 });
     }
 
-    const msg = {
-      to: companyEmail,
+    const transporter = nodemailer.createTransport(smtpOptions);
+
+    const mailOptions = {
       from: 'info@luxorweb.it',
+      to: companyEmail,
       subject: `Nuova Prenotazione per ${experienceTitle}`,
       html: `
         <div style="font-family: Arial, sans-serif; color: #333; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #eaeaea; border-radius: 10px; background-color: #f9f9f9;">
           <header style="text-align: center; padding-bottom: 20px; border-bottom: 1px solid #eaeaea;">
-            <img src="https://firebasestorage.googleapis.com/v0/b/hunt4taste.appspot.com/o/icon-512x512.png?alt=media&token=0ae695a0-debd-44e7-89df-73ccd7a865f1" alt="Logo" style="width: 100%; height: auto; border-radius: 10px 10px 0 0;" />
+            <img src="https://firebasestorage.googleapis.com/v0/b/hunt4taste.appspot.com/o/icon-512x512.png?alt=media&token=0ae695a0-debd-44e7-89df-73ccd7a865f1" alt="Logo" style="width: 100%; height: fit-content; border-radius: 10px 10px 0 0;" />
             <h1 style="color: #485d8b;">Nuova Prenotazione per ${experienceTitle}</h1>
           </header>
           <main style="padding: 20px;">
@@ -54,7 +64,7 @@ export async function POST(req) {
       `,
     };
 
-    await sgMail.send(msg);
+    await transporter.sendMail(mailOptions);
     return new Response(JSON.stringify({ message: 'Email inviata con successo' }), { status: 200 });
   } catch (error) {
     console.error('Errore durante l\'invio dell\'email:', error);
