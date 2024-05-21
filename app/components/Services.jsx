@@ -9,7 +9,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Scrollbar } from "swiper/modules";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { Grid, Card, CardMedia, CardContent, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import Skeleton from "react-loading-skeleton";
 import Link from "next/link";
 import Cookies from 'js-cookie';
@@ -18,7 +18,8 @@ export default function ServicesSection(props) {
   const [services, setServices] = useState([]);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const { slides, options } = props;
+  const isLargeScreen = useMediaQuery(theme.breakpoints.up("lg"));
+  const { options } = props;
   const [emblaRef, emblaApi] = useEmblaCarousel(options);
 
   useEffect(() => {
@@ -75,7 +76,6 @@ export default function ServicesSection(props) {
           320: {
             slidesPerView: 2.2,
             spaceBetween: 60,
-            height: "80px",
           },
           550: {
             slidesPerView: 3.2,
@@ -144,14 +144,14 @@ export default function ServicesSection(props) {
                   variant="subtitle1"
                   color="secondary"
                   sx={{
-                    p: 1,
-                    textAlign: "left",
-                    width: "100%",
+                    pt: 1,
+                    textAlign: "center",
+                    width: "200px",
                     color: "#7B7C7C",
                     overflow: "hidden",
-                    whiteSpace: "nowrap",
-                    textOverflow: "ellipsis",
-                    // Rimuove il minWidth che causava problemi
+                    whiteSpace: isLargeScreen ? "normal" : "nowrap",
+                    textOverflow: isLargeScreen ? "unset" : "ellipsis",
+                    textAlign: 'left',
                   }}
                 >
                   {item.title.toUpperCase()}

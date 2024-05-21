@@ -140,6 +140,15 @@ const PrenotaEsperienza = () => {
     }
   };
 
+  const formatDuration = (duration) => {
+    if (duration > 60) {
+      const hours = Math.floor(duration / 60);
+      const minutes = duration % 60;
+      return `${hours}h ${minutes}min`;
+    }
+    return `${duration} Minuti`;
+  };
+
   const handleBook = () => {
     setShowModal(true);
   };
@@ -189,7 +198,7 @@ const PrenotaEsperienza = () => {
             </div>
             <div className="flex items-center">
               <FaRegClock className="text-gray-500" />
-              <p className="ml-2 text-sm text-gray-500">{esperienza.duration} Minuti</p>
+              <p className="ml-2 text-sm text-gray-500">{formatDuration(esperienza.duration)}</p>
             </div>
             <div className="flex items-center">
               <FaEuroSign className="text-gray-500" />
