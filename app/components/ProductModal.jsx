@@ -9,7 +9,7 @@ import { styled } from "@mui/material/styles";
 import { IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import DOMPurify from 'dompurify';
-
+import Cookies from 'js-cookie';
 
 const StyledDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiPaper-root": {
@@ -77,10 +77,13 @@ const CloseButton = styled(IconButton)(({ theme }) => ({
   border: "2px solid white",
 }));
 
-const ProductModal = ({ isOpen, onClose, product, addToCart }) => {
+const ProductModal = ({ isOpen, onClose, product, addToCart, translations }) => {
   if (!product) return null;
 
   const cleanDescription = DOMPurify.sanitize(product.description);
+
+  const lang = Cookies.get('lang') || 'en'; // Recupera la lingua dai cookie, predefinita a 'en'
+  const t = translations[lang];
 
   return (
     <StyledDialog
@@ -109,8 +112,8 @@ const ProductModal = ({ isOpen, onClose, product, addToCart }) => {
         <p dangerouslySetInnerHTML={{ __html: cleanDescription }}></p>
       </StyledDialogContent>
       <StyledDialogActions>
-      <StyledButton onClick={() => {addToCart(product); onClose();}} style={{backgroundColor: "#c5b473", color: "white"}}>
-          Aggiungi al Carrello
+        <StyledButton onClick={() => { addToCart(product); onClose(); }} style={{ backgroundColor: "#c5b473", color: "white" }}>
+          {t.addToCart}
         </StyledButton>
       </StyledDialogActions>
     </StyledDialog>

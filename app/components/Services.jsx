@@ -10,26 +10,21 @@ import { Pagination, Scrollbar } from "swiper/modules";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { Grid, Card, CardMedia, CardContent, Typography } from "@mui/material";
-import { FaWineBottle } from "react-icons/fa";
 import Skeleton from "react-loading-skeleton";
 import Link from "next/link";
 import Cookies from 'js-cookie';
-
 
 export default function ServicesSection(props) {
   const [services, setServices] = useState([]);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  // Utilizzando le proprie di props per slides e options se necessario
   const { slides, options } = props;
   const [emblaRef, emblaApi] = useEmblaCarousel(options);
 
   useEffect(() => {
-    // First try to get the user_id from the URL query parameters
     const queryParams = new URLSearchParams(window.location.search);
     let userId = parseInt(queryParams.get('user_id'));
 
-    // If not found in the URL, try to get it from cookies
     if (!userId) {
       userId = parseInt(Cookies.get('user_id'));
     }
@@ -39,37 +34,34 @@ export default function ServicesSection(props) {
       return;
     }
 
-    // Fetch all services from the API
-    fetch("https://hunt4taste.it/api/services")
+    const lang = Cookies.get('lang') || 'en';
+
+    fetch(`https://hunt4taste.it/api/services?lang=${lang}`)
       .then(response => response.json())
       .then(data => {
-        // Filter the services based on the user_id
         const filteredServices = data.filter(service => service.user_id === userId);
         setServices(filteredServices);
         console.log(filteredServices);
       })
       .catch(error => console.error("Error fetching data: ", error));
-  }, []);  // The dependency array remains empty because the user ID in cookies is expected not to change frequently
-  
+  }, []);
 
   const styles = {
     card: {
-      maxWidth: isMobile ? 100 : 130, // 100px on mobile, 130px otherwise
+      maxWidth: isMobile ? 100 : 130,
       margin: "auto",
     },
     media: {
       height: 0,
-      paddingTop: "100%", // Aspect ratio 1:1
+      paddingTop: "100%",
     },
     title: {
       textAlign: "center",
-      // Other styling based on your design
     },
   };
 
   return (
     <Box sx={{ mt: 5, mb: 5, ml: 2 }}>
-   
       <Swiper
         className="mySwiper h-full"
         slidesPerView={1}
@@ -108,69 +100,75 @@ export default function ServicesSection(props) {
         }}
         modules={[Scrollbar]}
       >
-         {services.length > 0 ? services.map((item, index) => (
+        {services.length > 0 ? services.map((item, index) => (
           <Box key={index} sx={{ m: 1 }}>
             <SwiperSlide>
-            <Link href={`/servizi/${item.id}`} passHref>
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  bgcolor: "background.paper",
-                  borderRadius: "10px",
-                  overflow: "hidden",
-                  boxShadow: 3,
-                  width: {
-                    xs: 180,
-                    sm: 180,
-                    md: 180,
-                    lg: 200,
-                    xl: 280,
-                  }, // Square size
-                  height: {
-                    xs: 180,
-                    sm: 180,
-                    md: 180,
-                    lg: 200,
-                    xl: 280,
-                  }, // Square size
-                }}
-              >
+              <Link href={`/servizi/${item.id}`} passHref>
                 <Box
-                  component="img"
                   sx={{
-                    width: "100%",
-                    height: "100%", // Fill the square
-                    objectFit: "cover", // Maintain aspect ratio
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    bgcolor: "background.paper",
+                    borderRadius: "10px",
+                    overflow: "hidden",
+                    boxShadow: 3,
+                    width: {
+                      xs: 180,
+                      sm: 180,
+                      md: 180,
+                      lg: 200,
+                      xl: 280,
+                    },
+                    height: {
+                      xs: 180,
+                      sm: 180,
+                      md: 180,
+                      lg: 200,
+                      xl: 280,
+                    },
                   }}
-                  src={item.image}
-                  alt={item.title}
-                />
-              </Box>
-              <Typography
-                variant="subtitle1"
-                color="secondary"
-                sx={{
-                  p: 1,
-                  textAlign: "left",
-                  width: "100%",
-                  color: "#7B7C7C",
-                  overflow: "hidden",
-                  whiteSpace: "nowrap",
-                  textOverflow: "ellipsis",
-                  minWidth: `${item.title.length * 15}px`
-                }}
-              >
-                {item.title.toUpperCase()}
-              </Typography>
+                >
+                  <Box
+                    component="img"
+                    sx={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                    }}
+                    src={item.image}
+                    alt={item.title}
+                  />
+                </Box>
+                <Typography
+                  variant="subtitle1"
+                  color="secondary"
+                  sx={{
+                    p: 1,
+                    textAlign: "left",
+                    width: "100%",
+                    color: "#7B7C7C",
+                    overflow: "hidden",
+                    whiteSpace: "nowrap",
+                    textOverflow: "ellipsis",
+                    // Rimuove il minWidth che causava problemi
+                  }}
+                >
+                  {item.title.toUpperCase()}
+                </Typography>
               </Link>
             </SwiperSlide>
           </Box>
-        )): (
+        )) : (
           <Skeleton count={7} />
         )}
       </Swiper>
     </Box>
   );
+}
+
+function getCookie(name) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(';').shift();
 }

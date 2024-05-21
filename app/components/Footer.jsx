@@ -10,12 +10,10 @@ import {
 } from "@mui/material";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import EventOutlinedIcon from "@mui/icons-material/EventOutlined";
-import WineBarOutlinedIcon from "@mui/icons-material/WineBarOutlined";
-import ForestOutlinedIcon from "@mui/icons-material/ForestOutlined";
 import AppsOutlinedIcon from "@mui/icons-material/AppsOutlined";
 import CloseIcon from "@mui/icons-material/Close";
 import IconButton from "@mui/material/IconButton";
-import {FaShoppingBag} from 'react-icons/fa';
+import { FaShoppingBag } from 'react-icons/fa';
 import Cookies from 'js-cookie';
 
 const Footer = () => {
@@ -26,6 +24,42 @@ const Footer = () => {
   const [showiOSInstructions, setShowiOSInstructions] = useState(false);
   const [userId, setUserId] = useState(null);
 
+  const lang = Cookies.get('lang') || 'en'; // Recupera la lingua dai cookie, predefinita a 'en'
+
+  const translations = {
+    it: {
+      experiences: "Esperienze",
+      shop: "Shop",
+      installNow: "Installa ora",
+      iosInstallInstructions: "Per installare: tocca icona di condivisione poi 'Aggiungi a schermata Home'"
+    },
+    en: {
+      experiences: "Experiences",
+      shop: "Shop",
+      installNow: "Install now",
+      iosInstallInstructions: "To install: tap share icon then 'Add to Home Screen'"
+    },
+    fr: {
+      experiences: "Expériences",
+      shop: "Boutique",
+      installNow: "Installer maintenant",
+      iosInstallInstructions: "Pour installer : touchez l'icône de partage puis 'Ajouter à l'écran d'accueil'"
+    },
+    de: {
+      experiences: "Erfahrungen",
+      shop: "Geschäft",
+      installNow: "Jetzt installieren",
+      iosInstallInstructions: "Zum Installieren: Tippen Sie auf das Symbol zum Teilen und dann auf 'Zum Home-Bildschirm hinzufügen'"
+    },
+    es: {
+      experiences: "Experiencias",
+      shop: "Tienda",
+      installNow: "Instalar ahora",
+      iosInstallInstructions: "Para instalar: toca el icono de compartir y luego 'Agregar a la pantalla de inicio'"
+    }
+  };
+
+  const t = translations[lang];
 
   useEffect(() => {
     // Controlla se l'app è in modalità standalone (cioè se è stata installata)
@@ -79,7 +113,7 @@ const Footer = () => {
       open={showiOSInstructions}
       autoHideDuration={6000}
       onClose={() => setShowiOSInstructions(false)}
-      message="Per installare: tocca icona di condivisione poi 'Aggiungi a schermata Home'"
+      message={t.iosInstallInstructions}
       action={
         <IconButton
           size="small"
@@ -119,20 +153,20 @@ const Footer = () => {
           </Fab>
         </Link>
         <BottomNavigationAction
-          label="Esperienze"
+          label={t.experiences}
           icon={<EventOutlinedIcon style={{ color: "#485d8b" }} />}
           className="cursor-pointer"
           onClick={() => router.push("/esperienze")}
         />
         <BottomNavigationAction
-          label="Shop"
+          label={t.shop}
           icon={<FaShoppingBag style={{ color: "#485d8b" }} />}
           className="cursor-pointer"
           onClick={() => router.push("/shop")}
         />
         {!isPWAInstalled && (
           <BottomNavigationAction
-            label="Installa ora"
+            label={t.installNow}
             icon={<AppsOutlinedIcon style={{ color: "#485d8b" }} />}
             className="cursor-pointer"
             onClick={handleInstallClick}
@@ -140,15 +174,14 @@ const Footer = () => {
         )}
       </BottomNavigation>
       {iOSInstructions}
-     {isPWAInstalled && (
-      <div
-        style={{
-          height: 'calc(env(safe-area-inset-bottom) + 15px)',
-          backgroundColor: '#FFF',
-        }}
-      />
-    )}
-
+      {isPWAInstalled && (
+        <div
+          style={{
+            height: 'calc(env(safe-area-inset-bottom) + 15px)',
+            backgroundColor: '#FFF',
+          }}
+        />
+      )}
     </footer>
   );
 };

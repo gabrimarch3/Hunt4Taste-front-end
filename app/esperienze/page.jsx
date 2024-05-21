@@ -6,12 +6,37 @@ import Link from "next/link";
 import Image from "next/image";
 import DOMPurify from 'dompurify';
 import he from 'he';
-
 import Cookies from 'js-cookie'; 
 
 const Esperienze = () => {
   const [experiences, setExperiences] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  const translations = {
+    it: {
+      loading: 'Caricamento...',
+      discover: 'Scopri'
+    },
+    en: {
+      loading: 'Loading...',
+      discover: 'Discover'
+    },
+    fr: {
+      loading: 'Chargement...',
+      discover: 'Découvrir'
+    },
+    de: {
+      loading: 'Laden...',
+      discover: 'Entdecken'
+    },
+    es: {
+      loading: 'Cargando...',
+      discover: 'Descubrir'
+    }
+  };
+
+  const lang = Cookies.get('lang') || 'en'; // Ottieni la lingua dai cookie o usa 'en' come predefinita
+  const t = translations[lang];
 
   useEffect(() => {
     const userId = Cookies.get('user_id'); // Retrieve the user_id from cookies
@@ -21,7 +46,7 @@ const Esperienze = () => {
       return;
     }
 
-    fetch("https://hunt4taste.it/api/experiences")
+    fetch(`https://hunt4taste.it/api/experiences?lang=${lang}`)
       .then((response) => response.json())
       .then((data) => {
         // Filter the experiences based on the user_id from the cookie
@@ -33,7 +58,7 @@ const Esperienze = () => {
         console.error("Errore nella chiamata API:", error);
         setIsLoading(false);
       });
-  }, []);
+  }, [lang]);
 
   const truncateDescription = (desc, maxLength = 100) => {
     // Decodifica gli HTML entities
@@ -49,7 +74,7 @@ const Esperienze = () => {
   if (isLoading) {
     return (
       <div className="flex flex-col min-h-screen justify-center items-center">
-        <p>Loading...</p>
+        <p>{t.loading}</p>
       </div>
     );
   }
@@ -77,7 +102,7 @@ const Esperienze = () => {
                 <div className="mt-6 flex justify-end">
                   <Link legacyBehavior href={`/esperienze/${experience.id}`}>
                     <a className="text-white bg-[#485d8b] hover:bg-[#485d8b] rounded-full py-2 px-4 transition-colors duration-300 ease-out font-semibold text-sm">
-                      {experience.buttonText || 'Scopri'}
+                      {experience.buttonText || t.discover}
                     </a>
                   </Link>
                 </div>

@@ -20,7 +20,7 @@ export default function SubscriptionForm() {
 
     const userId = Cookies.get('user_id');
     if (!userId) {
-      setMessage('User ID non trovato nei cookie');
+      setMessage(translations[lang].userIdNotFound);
       return;
     }
 
@@ -30,7 +30,7 @@ export default function SubscriptionForm() {
       const companyEmail = data.user.company_email;
 
       if (!companyEmail) {
-        setMessage('Company email non trovata');
+        setMessage(translations[lang].companyEmailNotFound);
         return;
       }
 
@@ -49,8 +49,8 @@ export default function SubscriptionForm() {
         setIsSuccess(true);
       }
     } catch (error) {
-      console.error('Errore durante l\'invio dell\'email:', error);
-      setMessage('Errore durante l\'invio dell\'email');
+      console.error(translations[lang].emailSendError, error);
+      setMessage(translations[lang].emailSendError);
     }
   };
 
@@ -75,9 +75,61 @@ export default function SubscriptionForm() {
     }
   }, [isSuccess]);
 
+  const lang = Cookies.get('lang') || 'en'; // Default to 'en' if no cookie is present
+
+  const translations = {
+    it: {
+      stayInTouch: "RIMANI IN CONTATTO",
+      namePlaceholder: "Nome e Cognome",
+      emailPlaceholder: "Email",
+      subscribe: "Iscriviti",
+      userIdNotFound: "User ID non trovato nei cookie",
+      companyEmailNotFound: "Company email non trovata",
+      emailSendError: "Errore durante l'invio dell'email"
+    },
+    en: {
+      stayInTouch: "STAY IN TOUCH",
+      namePlaceholder: "Name and Surname",
+      emailPlaceholder: "Email",
+      subscribe: "Subscribe",
+      userIdNotFound: "User ID not found in cookies",
+      companyEmailNotFound: "Company email not found",
+      emailSendError: "Error sending email"
+    },
+    fr: {
+      stayInTouch: "RESTER EN CONTACT",
+      namePlaceholder: "Nom et Prénom",
+      emailPlaceholder: "Email",
+      subscribe: "S'abonner",
+      userIdNotFound: "ID utilisateur non trouvé dans les cookies",
+      companyEmailNotFound: "Email de l'entreprise non trouvée",
+      emailSendError: "Erreur lors de l'envoi de l'email"
+    },
+    de: {
+      stayInTouch: "IN KONTAKT BLEIBEN",
+      namePlaceholder: "Name und Nachname",
+      emailPlaceholder: "Email",
+      subscribe: "Abonnieren",
+      userIdNotFound: "Benutzer-ID nicht in Cookies gefunden",
+      companyEmailNotFound: "Firmen-E-Mail nicht gefunden",
+      emailSendError: "Fehler beim Senden der E-Mail"
+    },
+    es: {
+      stayInTouch: "MANTENTE EN CONTACTO",
+      namePlaceholder: "Nombre y Apellido",
+      emailPlaceholder: "Correo Electrónico",
+      subscribe: "Suscribirse",
+      userIdNotFound: "ID de usuario no encontrado en las cookies",
+      companyEmailNotFound: "Correo electrónico de la empresa no encontrado",
+      emailSendError: "Error al enviar el correo electrónico"
+    },
+  };
+
+  const t = translations[lang];
+
   return (
     <div className="form-container flex flex-col p-3 mt-auto">
-      <h2 className="text-gray-500 font-bold text-xl pb-3">RIMANI IN CONTATTO</h2>
+      <h2 className="text-gray-500 font-bold text-xl pb-3">{t.stayInTouch}</h2>
       <div className="w-full min-h-[200px] p-7 bg-white flex flex-col justify-center shadow-lg rounded-xl">
         {!isSuccess ? (
           <form onSubmit={handleSubmit} className="h-15 w-full">
@@ -87,7 +139,7 @@ export default function SubscriptionForm() {
               value={formData.name}
               onChange={handleChange}
               className="w-full border-b border-b-[#5D5D5D] bg-transparent text-gray-600 mb-10 font-thin"
-              placeholder="Nome e Cognome"
+              placeholder={t.namePlaceholder}
               required
             />
             <div className="flex flex-col xl:flex-row md:ml-0">
@@ -97,14 +149,14 @@ export default function SubscriptionForm() {
                 value={formData.email}
                 onChange={handleChange}
                 className="w-full border-b border-b-[#5D5D5D] bg-transparent text-gray-600 font-thin"
-                placeholder="Email"
+                placeholder={t.emailPlaceholder}
                 required
               />
               <button
                 type="submit"
                 className="xl:ml-20 mt-9 xl:mt-0 text-center font-light bg-[#485d8b] w-full rounded-xl text-white h-10"
               >
-                Iscriviti
+                {t.subscribe}
               </button>
             </div>
           </form>

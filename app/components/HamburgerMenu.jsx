@@ -13,6 +13,7 @@ import { GiHamburgerMenu } from 'react-icons/gi';
 import { FaShoppingBag } from 'react-icons/fa';
 import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
+import Select from 'react-select';
 
 const HamburgerMenu = () => {
   const [open, setOpen] = useState(false);
@@ -20,7 +21,43 @@ const HamburgerMenu = () => {
   const [logo, setLogo] = useState('');
   const [userId, setUserId] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [lang, setLang] = useState(Cookies.get('lang') || 'en'); // Default to 'en' if no cookie is present
   const router = useRouter();
+
+  const translations = {
+    it: {
+      home: 'Home',
+      experiences: 'Esperienze',
+      shop: 'Shop',
+      version: 'v. 1.0.0'
+    },
+    en: {
+      home: 'Home',
+      experiences: 'Experiences',
+      shop: 'Shop',
+      version: 'v. 1.0.0'
+    },
+    fr: {
+      home: 'Accueil',
+      experiences: 'Expériences',
+      shop: 'Boutique',
+      version: 'v. 1.0.0'
+    },
+    de: {
+      home: 'Startseite',
+      experiences: 'Erfahrungen',
+      shop: 'Geschäft',
+      version: 'v. 1.0.0'
+    },
+    es: {
+      home: 'Inicio',
+      experiences: 'Experiencias',
+      shop: 'Tienda',
+      version: 'v. 1.0.0'
+    }
+  };
+
+  const t = translations[lang];
 
   useEffect(() => {
     const userId = Cookies.get('user_id'); // Retrieve the user_id from cookies
@@ -79,10 +116,25 @@ const HamburgerMenu = () => {
     router.push(`/sections/${id}`);
   };
 
+  const handleLanguageChange = (selectedOption) => {
+    const selectedLang = selectedOption.value;
+    setLang(selectedLang);
+    Cookies.set('lang', selectedLang);
+    window.location.reload(); // Reload the page to apply the language change
+  };
+
   const menuItems = [
-    { text: 'Home', href: `/`, icon: <HomeIcon /> },
-    { text: 'Esperienze', href: '/esperienze', icon: <ExperienceIcon /> },
-    { text: 'Shop', href: '/shop', icon: <FaShoppingBag /> },
+    { text: t.home, href: `/`, icon: <HomeIcon /> },
+    { text: t.experiences, href: '/esperienze', icon: <ExperienceIcon /> },
+    { text: t.shop, href: '/shop', icon: <FaShoppingBag /> },
+  ];
+
+  const languageOptions = [
+    { value: 'it', label: 'Italiano' },
+    { value: 'en', label: 'Inglese' },
+    { value: 'fr', label: 'Francese' },
+    { value: 'de', label: 'Tedesco' },
+    { value: 'es', label: 'Spagnolo' },
   ];
 
   if (isLoading) {
@@ -108,7 +160,39 @@ const HamburgerMenu = () => {
           onKeyDown={toggleDrawer(false)}
           className="px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800 h-full relative"
         >
-          <ul className="space-y-2 mt-10">
+          <Box className="flex justify-between items-center mb-4">
+            <Select
+              value={languageOptions.find(option => option.value === lang)}
+              onChange={handleLanguageChange}
+              options={languageOptions}
+              styles={{
+                control: (provided) => ({
+                  ...provided,
+                  minWidth: 150,
+                  borderRadius: '8px',
+                  borderColor: '#e2e8f0',
+                  boxShadow: 'none',
+                  '&:hover': {
+                    borderColor: '#cbd5e0',
+                  },
+                }),
+                menu: (provided) => ({
+                  ...provided,
+                  borderRadius: '8px',
+                  borderColor: '#e2e8f0',
+                }),
+                option: (provided, state) => ({
+                  ...provided,
+                  backgroundColor: state.isSelected ? '#485d8b' : state.isFocused ? '#e2e8f0' : undefined,
+                  color: state.isSelected ? 'white' : 'black',
+                  '&:hover': {
+                    backgroundColor: '#cbd5e0',
+                  },
+                }),
+              }}
+            />
+          </Box>
+          <ul className="space-y-2 mt-2">
             {menuItems.map((item, index) => (
               <li key={index}>
                 <a href={item.href}>
@@ -140,7 +224,7 @@ const HamburgerMenu = () => {
             ))}
           </ul>
           <div className="absolute bottom-0 right-0 pb-3 pr-3 mb-10">
-            <p className="text-gray-400 dark:text-gray-400">v. 1.0.0</p>
+            <p className="text-gray-400 dark:text-gray-400">{t.version}</p>
           </div>
         </Box>
       </Drawer>
