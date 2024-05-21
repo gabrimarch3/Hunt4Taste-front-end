@@ -12,7 +12,7 @@ export default function Home() {
   useEffect(() => {
     const queryParams = new URLSearchParams(window.location.search);
     const encodedUserId = queryParams.get('user_id');
-  
+
     if (encodedUserId) {
       try {
         const decodedUserId = decodeURIComponent(window.atob(encodedUserId).split('').map((c) => {
@@ -30,10 +30,15 @@ export default function Home() {
         console.error('Error decoding user ID:', error);
       }
     }
+
+    // Imposta il cookie della lingua in italiano se non è già presente
+    if (!Cookies.get('lang')) {
+      Cookies.set('lang', 'it', { expires: 7 });
+    }
   }, []);
 
   const userId = Cookies.get('user_id');
-  const lang = Cookies.get('lang') || 'en'; // Default to 'en' if no cookie is present
+  const lang = Cookies.get('lang') || 'it'; // Default to 'it' if no cookie is present
 
   const translations = {
     it: {
