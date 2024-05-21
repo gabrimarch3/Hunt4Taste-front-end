@@ -34,6 +34,7 @@ export default function Home() {
     // Imposta il cookie della lingua in italiano se non è già presente
     if (!Cookies.get('lang')) {
       Cookies.set('lang', 'it', { expires: 7 });
+      window.location.reload(); // Ricarica la pagina se il cookie 'lang' è stato aggiunto
     }
   }, []);
 
