@@ -14,6 +14,7 @@ import { FaShoppingBag } from 'react-icons/fa';
 import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
 import Select from 'react-select';
+import Backdrop from '@mui/material/Backdrop';
 
 const HamburgerMenu = () => {
   const [open, setOpen] = useState(false);
@@ -150,14 +151,12 @@ const HamburgerMenu = () => {
         anchor="left"
         open={open}
         onClose={toggleDrawer(false)}
-        className="fixed top-0 left-0 z-40 w-64 h-screen transition-transform transform"
+        className="fixed top-0 left-0 z-40 w-full h-screen transition-transform transform"
         aria-label="Sidebar"
-        BackdropProps={{ invisible: true }}
+        BackdropProps={{ invisible: false, style: { backgroundColor: 'rgba(0, 0, 0, 0.5)' } }}
       >
         <Box
           role="presentation"
-          onClick={toggleDrawer(false)}
-          onKeyDown={toggleDrawer(false)}
           className="px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800 h-full relative"
         >
           <Box className="flex justify-between items-center mb-4">
