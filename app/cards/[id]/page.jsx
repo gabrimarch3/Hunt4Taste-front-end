@@ -65,10 +65,10 @@ const WineHouse = () => {
     <div className="bg-white text-gray-800 font-sans min-h-screen flex flex-col">
       <NavigationHeader />
 
-      <div className="container mx-auto my-8 p-4">
+      <div className="container mx-auto my-8 p-4 lg:p-8 max-w-screen-xl">
         <div className="rounded-lg overflow-hidden shadow-lg">
           {card && (
-            <div className="relative w-full h-96">
+            <div className="relative w-full h-64 md:h-96 lg:h-[40rem]">
               <img
                 src={card.image_url}
                 alt={card.title}
@@ -79,20 +79,20 @@ const WineHouse = () => {
         </div>
       </div>
 
-      <div className="container mx-auto px-6 py-4">
-        <h3 className="text-3xl text-blue-800 font-semibold mb-6">{card.title}</h3>
-        <p className="text-gray-600 text-lg mb-4" dangerouslySetInnerHTML={{ __html: card.description }}></p>
+      <div className="container mx-auto px-6 py-4 lg:py-8 max-w-screen-xl">
+        <h3 className="text-3xl lg:text-4xl text-blue-800 font-semibold mb-6">{card.title}</h3>
+        <p className="text-gray-600 text-lg lg:text-xl mb-4" dangerouslySetInnerHTML={{ __html: card.description }}></p>
 
         {card.pages.map(page => (
           <div key={page.id} className="mb-8">
-            <h4 className="text-2xl text-blue-700 font-semibold mb-3">{page.title}</h4>
-            <p className="text-gray-600" dangerouslySetInnerHTML={{ __html: page.content }}></p>
+            <h4 className="text-2xl lg:text-3xl text-blue-700 font-semibold mb-3">{page.title}</h4>
+            <p className="text-gray-600 text-lg lg:text-xl" dangerouslySetInnerHTML={{ __html: page.content }}></p>
           </div>
         ))}
       </div>
 
-      <div className="container mx-auto px-6 py-4">
-        <h3 className="text-2xl text-gray-700 mb-4">{t.inHotel}</h3>
+      <div className="container mx-auto px-6 py-4 lg:py-8 max-w-screen-xl">
+        <h3 className="text-2xl lg:text-3xl text-gray-700 mb-4">{t.inHotel}</h3>
         <SwiperCards />
       </div>
 

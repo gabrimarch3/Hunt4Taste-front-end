@@ -5,7 +5,7 @@ import NavigationHeader from "../../components/NavigationHeader";
 import Footer from "../../components/Footer";
 import SwiperCards from "../../components/SwiperCards";
 import ServicesSection from '../../components/Services';
-import { FaTag , FaEuroSign } from "react-icons/fa";
+import { FaTag, FaEuroSign } from "react-icons/fa";
 import Cookies from 'js-cookie';
 import Image from 'next/image';
 import DOMPurify from 'dompurify';
@@ -106,21 +106,23 @@ const ServiceDetailPage = () => {
         <div className="bg-white text-gray-800 font-sans min-h-screen flex flex-col">
             <NavigationHeader />
 
-            <div className="container mx-auto my-8 p-4">
+            <div className="container mx-auto my-8 p-4 lg:p-8 max-w-screen-xl">
                 <div className="rounded-lg overflow-hidden shadow-lg">
-                    <Image src={service.image} alt={service.title} layout="responsive" width={500} height={300} objectFit="cover" className="w-full" />
-                    <div className="p-6 space-y-4">
-                        <h2 className="text-3xl text-blue-800 font-semibold">{service.title}</h2>
-                        <p className="text-gray-600 text-lg" dangerouslySetInnerHTML={{ __html: service.description }}></p>
+                    <div className="relative w-full h-64 md:h-96 lg:h-[40rem]">
+                        <Image src={service.image} alt={service.title} layout="fill" objectFit="cover" className="w-full" />
+                    </div>
+                    <div className="p-6 lg:p-8 space-y-4">
+                        <h2 className="text-3xl lg:text-4xl text-blue-800 font-semibold">{service.title}</h2>
+                        <p className="text-gray-600 text-lg lg:text-xl" dangerouslySetInnerHTML={{ __html: service.description }}></p>
 
                         {service.cost && (
-                            <div className="flex items-center text-lg text-gray-600">
+                            <div className="flex items-center text-lg lg:text-xl text-gray-600">
                                 <FaEuroSign className="mr-2" />
                                 <p>{t.cost}: €{service.cost}</p>
                             </div>
                         )}
                         {service.category && (
-                            <div className="flex items-center text-lg text-gray-600">
+                            <div className="flex items-center text-lg lg:text-xl text-gray-600">
                                 <FaTag className="mr-2" />
                                 <p>{t.category}: {service.category}</p>
                             </div>
@@ -129,12 +131,12 @@ const ServiceDetailPage = () => {
                 </div>
 
                 <div className="mt-8">
-                    <h3 className="text-2xl text-gray-700 font-semibold mb-4">{t.relatedServices}</h3>
+                    <h3 className="text-2xl lg:text-3xl text-gray-700 font-semibold mb-4">{t.relatedServices}</h3>
                     <ServicesSection />
                 </div>
 
                 <div className="mt-8">
-                    <h3 className="text-2xl text-gray-700 font-semibold mb-4">{t.inHotel}</h3>
+                    <h3 className="text-2xl lg:text-3xl text-gray-700 font-semibold mb-4">{t.inHotel}</h3>
                     <SwiperCards />
                 </div>
             </div>
