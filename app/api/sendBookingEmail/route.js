@@ -54,7 +54,6 @@ export async function POST(req) {
               <p style="font-size: 16px; margin: 10px 0;"><strong>Numero di Partecipanti:</strong> ${participants}</p>
               <p style="font-size: 16px; margin: 10px 0;"><strong>Messaggio:</strong> ${message}</p>
             </div>
-            <a href="https://hunt4taste.it/dashboard" style="display: inline-block; margin-top: 20px; padding: 10px 20px; background-color: #485d8b; color: #fff; text-decoration: none; border-radius: 5px;">Visualizza Prenotazione</a>
           </main>
           <footer style="text-align: center; padding-top: 20px; border-top: 1px solid #eaeaea; font-size: 14px; color: #777;">
             <p>Grazie per utilizzare il nostro servizio.</p>
