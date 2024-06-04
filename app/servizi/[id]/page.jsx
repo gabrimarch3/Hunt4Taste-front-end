@@ -9,10 +9,20 @@ import { FaTag, FaEuroSign } from "react-icons/fa";
 import Cookies from 'js-cookie';
 import Image from 'next/image';
 import DOMPurify from 'dompurify';
+import CryptoJS from 'crypto-js';
+
+const secretKey = "1234567890abcdef";
+
+const decryptId = (encryptedId) => {
+  const base64 = encryptedId.replace(/-/g, '+').replace(/_/g, '/');
+  const bytes = CryptoJS.AES.decrypt(base64, secretKey);
+  return bytes.toString(CryptoJS.enc.Utf8);
+};
 
 const ServiceDetailPage = () => {
     const pathname = usePathname();
-    const serviceId = pathname.split('/')[2];
+    const encryptedId = pathname.split('/')[2];
+    const serviceId = decryptId(encryptedId);
     const [service, setService] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
 

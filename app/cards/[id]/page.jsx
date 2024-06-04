@@ -9,10 +9,20 @@ import Footer from "../../components/Footer";
 import { usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
+import CryptoJS from 'crypto-js';
+
+const secretKey = "1234567890abcdef";
+
+const decryptId = (encryptedId) => {
+  const base64 = encryptedId.replace(/-/g, '+').replace(/_/g, '/');
+  const bytes = CryptoJS.AES.decrypt(base64, secretKey);
+  return bytes.toString(CryptoJS.enc.Utf8);
+};
 
 const WineHouse = () => {
   const pathname = usePathname();
-  const cardId = pathname.split('/')[2];
+  const encryptedId = pathname.split('/')[2];
+  const cardId = decryptId(encryptedId);
   const [card, setCard] = useState(null);
 
   const translations = {

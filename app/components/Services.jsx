@@ -13,6 +13,14 @@ import { Typography } from "@mui/material";
 import Skeleton from "react-loading-skeleton";
 import Link from "next/link";
 import Cookies from 'js-cookie';
+import CryptoJS from 'crypto-js';
+
+const secretKey = "1234567890abcdef";
+
+const encryptId = (id) => {
+  const encrypted = CryptoJS.AES.encrypt(id.toString(), secretKey).toString();
+  return encrypted.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+};
 
 export default function ServicesSection(props) {
   const [services, setServices] = useState([]);
@@ -103,7 +111,7 @@ export default function ServicesSection(props) {
         {services.length > 0 ? services.map((item, index) => (
           <Box key={index} sx={{ m: 1 }}>
             <SwiperSlide>
-              <Link href={`/servizi/${item.id}`} passHref>
+              <Link href={`/servizi/${encryptId(item.id)}`} passHref>
                 <Box
                   sx={{
                     display: "flex",

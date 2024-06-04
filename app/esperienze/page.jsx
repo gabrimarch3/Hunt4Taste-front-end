@@ -4,9 +4,8 @@ import NavigationHeader from "../components/NavigationHeader";
 import Footer from "../components/Footer";
 import Link from "next/link";
 import Image from "next/image";
-import DOMPurify from 'dompurify';
-import he from 'he';
 import Cookies from 'js-cookie'; 
+import CryptoJS from 'crypto-js';
 
 const Esperienze = () => {
   const [experiences, setExperiences] = useState([]);
@@ -35,11 +34,26 @@ const Esperienze = () => {
     }
   };
 
-  const lang = Cookies.get('lang') || 'en'; // Ottieni la lingua dai cookie o usa 'en' come predefinita
+  const lang = Cookies.get('lang') || 'en'; 
   const t = translations[lang];
 
+  const secretKey = "1234567890abcdef";
+
+  const encryptId = (id) => {
+    const encrypted = CryptoJS.AES.encrypt(id.toString(), secretKey).toString();
+    // Convert to base64url
+    return encrypted.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  };
+
+  const decryptId = (encryptedId) => {
+    // Convert from base64url to base64
+    const base64 = encryptedId.replace(/-/g, '+').replace(/_/g, '/');
+    const bytes = CryptoJS.AES.decrypt(base64, secretKey);
+    return bytes.toString(CryptoJS.enc.Utf8);
+  };
+
   useEffect(() => {
-    const userId = Cookies.get('user_id'); // Retrieve the user_id from cookies
+    const userId = Cookies.get('user_id');
     if (!userId) {
       console.error("No user ID found in cookies.");
       setIsLoading(false);
@@ -59,17 +73,6 @@ const Esperienze = () => {
         setIsLoading(false);
       });
   }, [lang]);
-
-  const truncateDescription = (desc, maxLength = 100) => {
-    // Decodifica gli HTML entities
-    const decodedText = he.decode(desc);
-    // Sanitizza il testo rimuovendo i tag HTML
-    const cleanText = DOMPurify.sanitize(decodedText, { ALLOWED_TAGS: [] });
-    // Rimuove eventuali HTML entities residue
-    const cleanTextWithoutEntities = cleanText.replace(/&[^\s;]+;/g, '');
-    // Tronca il testo se supera la lunghezza massima
-    return cleanTextWithoutEntities.length > maxLength ? cleanTextWithoutEntities.substring(0, maxLength) + "..." : cleanTextWithoutEntities;
-  };
 
   if (isLoading) {
     return (
@@ -97,10 +100,10 @@ const Esperienze = () => {
                   {experience.title}
                 </h3>
                 <p className="text-base text-gray-700 flex-1">
-                  {truncateDescription(experience.description)}
+                  {experience.short_description}
                 </p>
                 <div className="mt-6 flex justify-end">
-                  <Link legacyBehavior href={`/esperienze/${experience.id}`}>
+                  <Link legacyBehavior href={`/esperienze/${encryptId(experience.id)}`}>
                     <a className="text-white bg-[#485d8b] hover:bg-[#485d8b] rounded-full py-2 px-4 transition-colors duration-300 ease-out font-semibold text-sm">
                       {experience.buttonText || t.discover}
                     </a>

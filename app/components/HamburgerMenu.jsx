@@ -133,9 +133,6 @@ const HamburgerMenu = () => {
   const languageOptions = [
     { value: 'it', label: 'Italiano' },
     { value: 'en', label: 'Inglese' },
-    { value: 'fr', label: 'Francese' },
-    { value: 'de', label: 'Tedesco' },
-    { value: 'es', label: 'Spagnolo' },
   ];
 
   if (isLoading) {

@@ -8,10 +8,11 @@ import { FaMapLocationDot, FaRegClock, FaEuroSign } from "react-icons/fa6";
 import Image from "next/image";
 import DOMPurify from 'dompurify';
 import Cookies from 'js-cookie';
+import CryptoJS from 'crypto-js';
 
 const PrenotaEsperienza = () => {
   const pathname = usePathname();
-  const esperienzaId = pathname.split('/')[2];
+  const encryptedId = pathname.split('/')[2];
   const [esperienza, setEsperienza] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({
@@ -120,8 +121,18 @@ const PrenotaEsperienza = () => {
     }
   };
 
-  const lang = Cookies.get('lang') || 'en'; // Ottieni la lingua dal cookie o usa 'en' come predefinita
+  const lang = Cookies.get('lang') || 'en';
   const t = translations[lang];
+
+  const secretKey = "1234567890abcdef";
+
+  const decryptId = (encryptedId) => {
+    const base64 = encryptedId.replace(/-/g, '+').replace(/_/g, '/');
+    const bytes = CryptoJS.AES.decrypt(base64, secretKey);
+    return bytes.toString(CryptoJS.enc.Utf8);
+  };
+
+  const esperienzaId = decryptId(encryptedId);
 
   useEffect(() => {
     if (esperienzaId) {

@@ -3,10 +3,10 @@ import { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore, { Pagination, Scrollbar } from 'swiper';
 import Skeleton from "@mui/material/Skeleton";
-import he from 'he';
 import Link from "next/link";
 import Image from "next/image";
 import Cookies from 'js-cookie';
+import CryptoJS from 'crypto-js';
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
@@ -14,22 +14,15 @@ import "swiper/css/scrollbar";
 // Inizializza i moduli Swiper necessari
 SwiperCore.use([Pagination, Scrollbar]);
 
+const secretKey = "1234567890abcdef";
+
+const encryptId = (id) => {
+  const encrypted = CryptoJS.AES.encrypt(id.toString(), secretKey).toString();
+  return encrypted.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+};
+
 export default function SwiperCards({ isLoading }) {
   const [cards, setCards] = useState([]);
-
-  function removeHtmlTags(text) {
-    // Decodifica gli entities prima di rimuovere i tag HTML
-    const decodedText = he.decode(text);
-    return decodedText.replace(/<\/?[^>]+(>|$)/g, "");
-  }
-
-  function truncateText(text, maxLength) {
-    const cleanText = removeHtmlTags(text);
-    if (cleanText.length > maxLength) {
-      return cleanText.substring(0, maxLength) + "...";
-    }
-    return cleanText;
-  }
 
   useEffect(() => {
     if (!isLoading) {
@@ -120,7 +113,7 @@ export default function SwiperCards({ isLoading }) {
       ) : (
         cards.map((card) => (
           <SwiperSlide key={card.id} className="flex flex-col items-center bg-white rounded-xl overflow-hidden shadow-lg m-2">
-            <Link href={`/cards/${card.id}`} legacyBehavior>
+            <Link href={`/cards/${encryptId(card.id)}`} legacyBehavior>
               <a className="block w-full h-56 overflow-hidden">
                 <img
                   src={card.image_url}
@@ -133,7 +126,7 @@ export default function SwiperCards({ isLoading }) {
               <div className="flex items-center justify-start space-x-2">
                 <h3 className="text-xl font-semibold text-[#485d8b]">{card.title}</h3>
               </div>
-              <p className="text-[#5D5D5D] text-sm text-left mt-2 overflow-hidden">{truncateText(card.description, 80)}</p>
+              <p className="text-[#5D5D5D] text-sm text-left mt-2 overflow-hidden">{card.short_description}</p>
             </div>
           </SwiperSlide>
         ))
