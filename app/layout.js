@@ -27,6 +27,7 @@ export default function RootLayout({ children }) {
           {children}
           <SpeedInsights />
           <Analytics debug={false}/>
+          <script data-host="https://phpanalytics.lunatio.com" data-dnt="false" src="https://phpanalytics.lunatio.com/js/script.js" id="ZwSg9rf6GA" async defer></script>
         </body>
       </html>
     </CartProvider>
