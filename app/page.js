@@ -16,6 +16,8 @@ export default function Home() {
     const renewCookie = (cookieName, value) => {
       // Imposta o rinnova il cookie con una scadenza di 7 giorni
       Cookies.set(cookieName, value, { expires: 7 });
+      // Salva il valore del cookie in localStorage
+      localStorage.setItem(cookieName, value);
     };
 
     if (encodedUserId) {
@@ -37,15 +39,25 @@ export default function Home() {
       const savedUserId = Cookies.get('user_id');
       if (savedUserId) {
         renewCookie('user_id', savedUserId);
+      } else {
+        // Ripristina il valore del cookie da localStorage se il cookie è assente
+        const localStorageUserId = localStorage.getItem('user_id');
+        if (localStorageUserId) {
+          renewCookie('user_id', localStorageUserId);
+        }
       }
     }
 
     // Imposta o rinnova il cookie della lingua in italiano se non è già presente
-    if (!Cookies.get('lang')) {
-      Cookies.set('lang', 'it', { expires: 7 });
-      window.location.reload(); // Ricarica la pagina se il cookie 'lang' è stato aggiunto
+    const savedLang = Cookies.get('lang');
+    if (!savedLang) {
+      const localStorageLang = localStorage.getItem('lang') || 'it';
+      renewCookie('lang', localStorageLang);
+      if (!savedLang) {
+        window.location.reload(); // Ricarica la pagina se il cookie 'lang' è stato aggiunto
+      }
     } else {
-      renewCookie('lang', Cookies.get('lang'));
+      renewCookie('lang', savedLang);
     }
   }, []);
 
