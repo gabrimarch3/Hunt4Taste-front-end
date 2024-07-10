@@ -13,28 +13,39 @@ export default function Home() {
     const queryParams = new URLSearchParams(window.location.search);
     const encodedUserId = queryParams.get('user_id');
 
+    const renewCookie = (cookieName, value) => {
+      // Imposta o rinnova il cookie con una scadenza di 7 giorni
+      Cookies.set(cookieName, value, { expires: 7 });
+    };
+
     if (encodedUserId) {
       try {
         const decodedUserId = decodeURIComponent(window.atob(encodedUserId).split('').map((c) => {
           return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
         }).join(''));
-        
+
         const savedUserId = Cookies.get('user_id');
-        Cookies.set('user_id', decodedUserId, { expires: 7 });
+        renewCookie('user_id', decodedUserId);
 
         if (savedUserId !== decodedUserId) {
           window.location.reload();
         }
-        
       } catch (error) {
         console.error('Error decoding user ID:', error);
       }
+    } else {
+      const savedUserId = Cookies.get('user_id');
+      if (savedUserId) {
+        renewCookie('user_id', savedUserId);
+      }
     }
 
-    // Imposta il cookie della lingua in italiano se non è già presente
+    // Imposta o rinnova il cookie della lingua in italiano se non è già presente
     if (!Cookies.get('lang')) {
       Cookies.set('lang', 'it', { expires: 7 });
       window.location.reload(); // Ricarica la pagina se il cookie 'lang' è stato aggiunto
+    } else {
+      renewCookie('lang', Cookies.get('lang'));
     }
   }, []);
 
